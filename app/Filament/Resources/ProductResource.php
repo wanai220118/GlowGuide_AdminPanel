@@ -58,8 +58,9 @@ class ProductResource extends Resource
                     ->required(),
 
                 Forms\Components\FileUpload::make('image')
-                    ->columns(1)
-                    ->directory('product-images')
+                    ->image()
+                    ->label('Label')
+                    ->directory('product-image'),
             ]);
     }
 
@@ -71,9 +72,11 @@ class ProductResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('product_number'),
+
                 Tables\Columns\ImageColumn::make('image')
-                    ->square()
-                    ->size(50),
+                    ->disk('public')
+                    ->visibility(visibility: 'public'),
+
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('qty'),

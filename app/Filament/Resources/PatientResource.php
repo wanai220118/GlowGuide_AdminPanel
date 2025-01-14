@@ -63,7 +63,7 @@ class PatientResource extends Resource
                 ->uploadingMessage('Uploading attachment...')
                 ->image()
                 ->maxSize(2048)
-                ->hint('The maximum file size is 2MB and in jpg format'),
+                ->hint('The maximum file size is 2MB.'),
             ]);
     }
 
@@ -75,7 +75,11 @@ class PatientResource extends Resource
                     ->sortable(),
                 // Tables\Columns\TextColumn::make(name: 'patient_number'),
 
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->disk('public')
+                    ->visibility('public')
+                    ->square()
+                    ->size(50),
 
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
