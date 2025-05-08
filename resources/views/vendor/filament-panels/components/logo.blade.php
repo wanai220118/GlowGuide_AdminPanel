@@ -1,5 +1,5 @@
 <img
-    src="weblogo.jpg"
+    src="/images/logocorner.jpg"
     alt="Glow Guide"
-    height="16"
+    style="width: auto; height: 70px;"
 />

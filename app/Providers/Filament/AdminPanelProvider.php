@@ -31,8 +31,15 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Fuchsia,
             ])
 
-            ->favicon('images/Logo.png')
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            // ->favicon('/images/Logo.png')
+            ->resources([
+                \App\Filament\Resources\PatientResource::class,
+                \App\Filament\Resources\StaffResource::class,
+                \App\Filament\Resources\ConsultationResource::class,
+                \App\Filament\Resources\ProductResource::class,
+                \App\Filament\Resources\OrderResource::class,
+            ])
+            // ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
