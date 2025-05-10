@@ -94,14 +94,11 @@ class StaffResource extends Resource
                 Tables\Columns\TextColumn::make('specialist'),
                 Tables\Columns\TextColumn::make('day'),
                 Tables\Columns\TextColumn::make('slot1')
-                    ->label('Slot 1 (8AM-10AM)')
-                    ->boolean(),
+                    ->label('Slot 1 (8AM-10AM)'),
                 Tables\Columns\TextColumn::make('slot2')
-                    ->label('Slot 2 (10AM-12PM)')
-                    ->boolean(),
+                    ->label('Slot 2 (10AM-12PM)'),
                 Tables\Columns\TextColumn::make('slot3')
-                    ->label('Slot 3 (2PM-4PM)')
-                    ->boolean(),
+                    ->label('Slot 3 (2PM-4PM)'),
 
             ])
             ->filters([

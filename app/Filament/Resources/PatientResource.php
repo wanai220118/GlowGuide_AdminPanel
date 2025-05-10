@@ -102,7 +102,7 @@ class PatientResource extends Resource
                 Tables\Columns\TextColumn::make('address'),
                 Tables\Columns\TextColumn::make('registration_date')
                     ->sortable()
-                    ->dateTime(),
+                    ->date(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('gender')

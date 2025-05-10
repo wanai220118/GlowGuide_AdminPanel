@@ -113,14 +113,12 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('expiry_date')
                     ->date()
                     ->label('Expiry Date')
-                    ->dateFormat('d-m-Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('inventory')
                     ->label('Inventory'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Last Updated')
                     ->dateTime()
-                    ->dateFormat('d-m-Y H:i:s')
                     ->sortable(),                    
                 ])
 
