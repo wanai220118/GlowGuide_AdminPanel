@@ -33,6 +33,14 @@ class OrderResource extends Resource
                     ->relationship('patient', 'name')
                     ->required(),
 
+                Forms\Components\TextInput::make('details')
+                    ->label('Order Details')
+                    ->maxLength(255),
+                
+                Forms\Components\TextInput::make('total_amount')
+                    ->type('number')
+                    ->required(),
+
                 Forms\Components\Select::make('status')
                     ->options([
                         'pending' => 'Pending',
@@ -40,12 +48,9 @@ class OrderResource extends Resource
                         'completed' => 'Completed',
                         'cancelled' => 'Cancelled',
                     ])
-                    ->default('pending')
+                    ->default('Completed')
                     ->required(),
 
-                Forms\Components\TextInput::make('total_amount')
-                    ->type('number')
-                    ->required(),
 
                 Forms\Components\Select::make('payment_method')
                     ->options([
@@ -61,7 +66,7 @@ class OrderResource extends Resource
                         'unpaid' => 'Unpaid',
                         'paid' => 'Paid',
                     ])
-                    ->default('unpaid')
+                    ->default('paid')
                     ->required(),
             ]);
     }
@@ -76,31 +81,21 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('order_number')
                     ->label('Order Number'),
                 Tables\Columns\TextColumn::make('patient.name')
-                    ->label('Patient')
+                    ->label('Ordered By')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->label('Status')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('details')
+                    ->label('Order Details'),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->label('Total Amount')
                     ->money('MYR'),
-                // Tables\Columns\TextColumn::make('created_at')
-                //     ->label('Created At')
-                //     ->date('Y-m-d H:i:s'),
-
                 Tables\Columns\TextColumn::make('status')
-                ->label('Status'),
-
-            // ->filters([
-            //     Tables\Filters\SelectFilter::make('status')
-            //         ->label('Status')
-            //         ->options([
-            //             'pending' => 'Pending',
-            //             'processing' => 'Processing',
-            //             'completed' => 'Completed',
-            //             'cancelled' => 'Cancelled',
-            //         ]),
-            //
+                    ->label('Status')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('payment_method')
+                    ->label('Payment Method'),
+                Tables\Columns\TextColumn::make('payment_status')
+                    ->label('Payment Status')
+                    ->searchable(),
         ])
 
             ->actions([

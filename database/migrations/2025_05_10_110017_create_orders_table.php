@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('consultations', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('consultation_name');
-            $table->text('notes')->nullable();
+            $table->string('order_number')->unique();
             $table->foreignId('patient_id')->constrained('patients')->cascadeOnDelete();
-            $table->foreignId('staff_id')->constrained('staff')->cascadeOnDelete();
-            $table->date('cons_date');
-            $table->time('cons_time');
-            $table->string('status')->default('pending');
+            $table->string('details')->nullable();
+            $table->decimal('total_amount', 10, 2);
+            $table->string('status')->default('Completed');
+            $table->string('payment_method')->default('Online Banking');
+            $table->string('payment_status')->default('Paid');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('consultations');
+        Schema::dropIfExists('orders');
     }
 };

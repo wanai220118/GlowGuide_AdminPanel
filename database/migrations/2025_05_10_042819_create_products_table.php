@@ -16,10 +16,13 @@ return new class extends Migration
             $table->string('product_number')->unique();
             $table->string('image');
             $table->string('name');
-            $table->integer('qty');
             $table->string('category');
-            $table->float('price');
             $table->text('description');
+            $table->float('price');
+            $table->integer('qty');
+            $table->date('expiry_date')->nullable();
+            $table->string('inventory');
+            // $table->date('updated_at');
             $table->timestamps();
         });
     }

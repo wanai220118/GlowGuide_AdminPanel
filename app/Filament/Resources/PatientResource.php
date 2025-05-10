@@ -23,28 +23,17 @@ class PatientResource extends Resource
     {
         return $form
             ->schema([
-                // Forms\Components\TextInput::make('patient_number')
-                //     ->disabled()
-                //     ->default(fn () => 'PAT-' . now()->format('YmdHis')),
+                Forms\Components\TextInput::make('patient_number')
+                    ->readOnly()
+                    ->default(fn () => 'PAT-' . now()->format('YmdHis')),
 
                 Forms\Components\TextInput::make('name')
-                ->required()
-                ->maxLength(255),
-
-                Forms\Components\TextInput::make('email')
-                ->required()
-                ->email()
-                ->hint('Example: name@example.com'),
+                    ->required()
+                    ->maxLength(255),
 
                 Forms\Components\DatePicker::make('date_of_birth')
                 ->required()
                 ->maxDate(now()),
-
-                Forms\Components\TextInput::make('phone_No')
-                ->required()
-                ->tel()
-                ->rules(['regex:/^[0-9\-\+]{9,15}$/'])
-                ->hint('Enter a valid phone number'),
 
                 Forms\Components\Select::make('gender')
                 ->required()
@@ -52,6 +41,28 @@ class PatientResource extends Resource
                     'male' => 'Male',
                     'female' => 'Female',
                 ]),
+
+                Forms\Components\TextInput::make('email')
+                ->required()
+                ->email()
+                ->hint('Example: name@gmail.com'),
+
+                Forms\Components\TextInput::make('phone_No')
+                ->label('Phone Number')
+                ->required()
+                ->tel()
+                ->rules(['regex:/^[0-9\-\+]{9,15}$/'])
+                ->hint('Enter a valid phone number'),
+
+                Forms\Components\TextInput::make('address')
+                ->required()
+                ->maxLength(255)
+                ->hint('Enter a valid address'),
+
+                Forms\Components\DatePicker::make('registration_date')
+                ->required()
+                ->default(now())
+                ->maxDate(now()),
 
                 // Forms\Components\Select::make('staff_id')
                 // ->relationship('staff', 'name')
@@ -73,21 +84,25 @@ class PatientResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
-                // Tables\Columns\TextColumn::make(name: 'patient_number'),
-
                 Tables\Columns\ImageColumn::make('image')
                     ->disk('public')
                     ->visibility('public')
-                    ->square()
-                    ->size(50),
-
+                    ->circular()
+                    ->ring(5)
+                    ->size(80),
+                Tables\Columns\TextColumn::make(name: 'patient_number'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('gender'),
                 Tables\Columns\TextColumn::make('date_of_birth')
-                    ->sortable(),
-                // Tables\Columns\TextColumn::make('staff.name')
-                //     ->searchable(),
+                    ->sortable(),    
+                Tables\Columns\TextColumn::make('gender'),
+                Tables\Columns\TextColumn::make('email'),
+                Tables\Columns\TextColumn::make('phone_No')
+                    ->label('Phone Number'),
+                Tables\Columns\TextColumn::make('address'),
+                Tables\Columns\TextColumn::make('registration_date')
+                    ->sortable()
+                    ->dateTime(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('gender')

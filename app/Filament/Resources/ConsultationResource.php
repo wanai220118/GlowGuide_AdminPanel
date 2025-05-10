@@ -65,7 +65,7 @@ class ConsultationResource extends Resource
                         'Completed' => 'Completed',
                         'Cancelled' => 'Cancelled',
                     ])
-                    ->default('Pending'),
+                    ->default('Completed'),
             ]);
     }
 
@@ -99,9 +99,9 @@ class ConsultationResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label('Status')
                     ->options([
-                        'Pending' => 'Pending',
-                        'Completed' => 'Completed',
-                        'Cancelled' => 'Cancelled',
+                        'pending' => 'Pending',
+                        'completed' => 'Completed',
+                        'cancelled' => 'Cancelled',
                     ]),
             ])
             ->actions([

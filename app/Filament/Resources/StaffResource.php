@@ -46,18 +46,40 @@ class StaffResource extends Resource
                     ])
                     ->required(),
 
-                Forms\Components\Toggle::make('availability')
+                Forms\Components\Select::make('day')
+                    ->label('Day')
+                    ->options([
+                        'Monday' => 'Monday',
+                        'Tuesday' => 'Tuesday',
+                        'Wednesday' => 'Wednesday',
+                        'Thursday' => 'Thursday',
+                        'Friday' => 'Friday',
+                    ])
+                    ->required(),
+                
+                Forms\Components\Toggle::make('slot1')
+                    ->label('Slot 1 (8AM-10AM)')
+                    ->default(true)
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->inline(false)
+                    ->required(),
+                
+                Forms\Components\Toggle::make('slot2')
+                    ->label('Slot 2 (10AM-12PM)')
                     ->default(true)
                     ->onColor('success')
                     ->offColor('danger')
                     ->inline(false)
                     ->required(),
 
-                // Forms\Components\Select::make('patient_id')
-                //     ->relationship('patient', 'name')
-                //     ->searchable()
-                //     ->preload()
-                //     ->required(),
+                Forms\Components\Toggle::make('slot3')
+                    ->label('Slot 3 (2PM-4PM)')
+                    ->default(true)
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->inline(false)
+                    ->required(),
             ]);
     }
 
@@ -70,11 +92,17 @@ class StaffResource extends Resource
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('specialist'),
-                Tables\Columns\TextColumn::make('availability')
-                    ->badge(),
-                    // ->formatStateUsing(fn ($value): string => $value ? 'Yes' : 'No'),
+                Tables\Columns\TextColumn::make('day'),
+                Tables\Columns\TextColumn::make('slot1')
+                    ->label('Slot 1 (8AM-10AM)')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('slot2')
+                    ->label('Slot 2 (10AM-12PM)')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('slot3')
+                    ->label('Slot 3 (2PM-4PM)')
+                    ->boolean(),
 
-                // Tables\Columns\TextColumn::make(name: 'patient.name'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('specialist')

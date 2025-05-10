@@ -4,12 +4,14 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
         Model::unguard();
+        Schema::defaultStringLength(191);
     }
     /**
      * Register any application services.
@@ -21,12 +23,7 @@ class AppServiceProvider extends ServiceProvider
 
     // public function boot()
     // {
-    //     Filament::serving(function () {
-    //         \Filament\Facades\Filament::registerRenderHook(
-    //             'head.start',
-    //             fn () => '<link rel="icon" href="/images/Logo.png" type="image/png" />'
-    //         );
-    //     });
+    //     Schema::defaultStringLength(191);
     // }
     /**
      * Bootstrap any application services.

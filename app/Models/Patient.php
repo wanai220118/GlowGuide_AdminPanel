@@ -27,12 +27,20 @@ class Patient extends Model //
     use HasFactory;
 
     protected $fillable = [
-        'date_of_birth',
+        'image',
         'name',
-        'email',
-        'password',
-        'phone_No',
+        'date_of_birth',
         'gender',
-        'image'
+        'email',
+        'phone_No',
+        'address',
+        'registration_date'
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->patient_number = 'PAT-' . now()->format('YmdHis');
+        });
+    }
 }

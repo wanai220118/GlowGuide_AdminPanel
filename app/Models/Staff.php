@@ -29,7 +29,10 @@ class Staff extends Model
         'name',
         'email',
         'specialist',
-        'availability'
+        'day',
+        'slot1',
+        'slot2',
+        'slot3'
     ];
 
     public static $specialistOptions = [

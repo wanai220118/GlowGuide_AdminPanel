@@ -13,17 +13,15 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
-            // $table->string('patient_number')->unique();
-            $table->date('date_of_birth');
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
-            $table->string('phone_No');
-            $table->enum('gender', ['Male', 'Female'])->after('name')->nullable();
-            // $table->foreignId('owner_id')->constrained('owners')->cascadeOnDelete();
-            // $table->string('type');
-            //add conditionID & cartID
             $table->string('image');
+            $table->string('patient_number')->unique();
+            $table->string('name');
+            $table->date('date_of_birth');
+            $table->enum('gender', ['Male', 'Female'])->nullable();
+            $table->string('email');
+            $table->string('phone_No');
+            $table->string('address');
+            $table->date('registration_date');
             $table->timestamps();
         });
     }

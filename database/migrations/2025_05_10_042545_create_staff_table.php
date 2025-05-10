@@ -16,7 +16,10 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->enum('specialist', ['Aesthetic Doctor', 'Dermatologist', 'Esthetician'])->nullable();
-            $table->boolean('availability')->nullable();
+            $table->string('day')->nullable();
+            $table->string('slot1')->nullable();
+            $table->string('slot2')->nullable();
+            $table->string('slot3')->nullable();
             $table->timestamps();
         });
     }
