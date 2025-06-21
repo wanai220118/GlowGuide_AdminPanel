@@ -20,6 +20,8 @@ use App\Models\Category;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Forms\Components\TextInput;
+use App\Filament\Exports\ProductPdfExporter;
+use Filament\Tables\Actions\Action;
 
 class ProductResource extends Resource
 {
@@ -239,7 +241,23 @@ class ProductResource extends Resource
             ->headerActions([
                 ExportAction::make()->exporter(ProductExporter::class)
                     ->label('Export')
-                    ->color('secondary')
+                    ->color('secondary'),
+                Action::make('Export to PDF')
+                ->label('Export PDF')
+                        ->icon('heroicon-o-document-arrow-down')
+                        ->color('danger')
+                        ->action(function () {
+                            $products = \App\Models\Product::with('category')->get();
+
+                            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('exports.products', [
+                                'products' => $products,
+                            ]);
+
+                            return response()->streamDownload(
+                                fn () => print($pdf->stream()),
+                                'products.pdf'
+                            );
+                        }),
             ])
 
             ->bulkActions([
