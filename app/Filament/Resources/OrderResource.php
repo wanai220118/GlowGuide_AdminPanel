@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\OrderExporter;
 
 class OrderResource extends Resource
 {
@@ -35,18 +37,20 @@ class OrderResource extends Resource
 
                 Forms\Components\TextInput::make('details')
                     ->label('Order Details')
-                    ->maxLength(255),
-                
+                    ->maxLength(1000),
+
                 Forms\Components\TextInput::make('total_amount')
-                    ->type('number')
+                    ->numeric()
+                    ->prefix('MYR')
+                    ->label('Total Amount')
                     ->required(),
 
                 Forms\Components\Select::make('status')
                     ->options([
-                        'pending' => 'Pending',
-                        'processing' => 'Processing',
-                        'completed' => 'Completed',
-                        'cancelled' => 'Cancelled',
+                        'Pending' => 'Pending',
+                        'Processing' => 'Processing',
+                        'Completed' => 'Completed',
+                        'Cancelled' => 'Cancelled',
                     ])
                     ->default('Completed')
                     ->required(),
@@ -63,10 +67,10 @@ class OrderResource extends Resource
 
                 Forms\Components\Select::make('payment_status')
                     ->options([
-                        'unpaid' => 'Unpaid',
-                        'paid' => 'Paid',
+                        'Unpaid' => 'Unpaid',
+                        'Paid' => 'Paid',
                     ])
-                    ->default('paid')
+                    ->default('Paid')
                     ->required(),
             ]);
     }
@@ -98,10 +102,30 @@ class OrderResource extends Resource
                     ->searchable(),
         ])
 
+        ->filters([
+            Tables\Filters\SelectFilter::make('status')
+                ->label('Order Status')
+                ->options([
+                    'Pending' => 'Pending',
+                    'Processing' => 'Processing',
+                    'Completed' => 'Completed',
+                    'Cancelled' => 'Cancelled',
+                ]),
+        ])
+
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->iconButton(),
+                Tables\Actions\ViewAction::make()
+                    ->iconButton(),
+                Tables\Actions\DeleteAction::make()
+                    ->iconButton(),
+            ])
+
+            ->headerActions([
+                ExportAction::make()->exporter(OrderExporter::class)
+                    ->label('Export')
+                    ->color('secondary')
             ])
 
             ->bulkActions([

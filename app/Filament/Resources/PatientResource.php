@@ -7,6 +7,10 @@ use App\Filament\Resources\PatientResource\RelationManagers;
 use App\Models\Patient;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\PatientExporter;
+use App\Filament\Resources\ExportBulkAction;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -33,13 +37,15 @@ class PatientResource extends Resource
 
                 Forms\Components\DatePicker::make('date_of_birth')
                 ->required()
+                // ->date()
+                // ->format(format: 'dd-mm-YYYY')
                 ->maxDate(now()),
 
                 Forms\Components\Select::make('gender')
                 ->required()
                 ->options([
-                    'male' => 'Male',
-                    'female' => 'Female',
+                    'Male' => 'Male',
+                    'Female' => 'Female',
                 ]),
 
                 Forms\Components\TextInput::make('email')
@@ -51,7 +57,7 @@ class PatientResource extends Resource
                 ->label('Phone Number')
                 ->required()
                 ->tel()
-                ->rules(['regex:/^[0-9\-\+]{9,15}$/'])
+                // ->rules(['regex:/^[0-9\-\+]{9,15}$/'])
                 ->hint('Enter a valid phone number'),
 
                 Forms\Components\TextInput::make('address')
@@ -85,6 +91,7 @@ class PatientResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
                 Tables\Columns\ImageColumn::make('image')
+                    ->url(fn ($record) => asset('storage/' . $record->image))
                     ->disk('public')
                     ->visibility('public')
                     ->circular()
@@ -94,7 +101,7 @@ class PatientResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('date_of_birth')
-                    ->sortable(),    
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('gender'),
                 Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('phone_No')
@@ -103,25 +110,55 @@ class PatientResource extends Resource
                 Tables\Columns\TextColumn::make('registration_date')
                     ->sortable()
                     ->date(),
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Registered At')
+                    ->since()
+                    ->sortable(),
+
+                Tables\Columns\BadgeColumn::make('created_at_badge')
+                    ->label('Registered')
+                    ->getStateUsing(fn ($record) => $record->created_at)
+                    ->formatStateUsing(function ($state) {
+                        return now()->diffInDays($state) <= 3 ? 'Recently Registered' : 'Registered';
+                    })
+                    ->color(function ($state) {
+                        return now()->diffInDays($state) <= 3 ? 'success' : 'secondary';
+                    })
+                    ->sortable(),
+
             ])
+
+
             ->filters([
                 Tables\Filters\SelectFilter::make('gender')
                     ->options([
-                        'male' => 'Male',
-                        'female' => 'Female',
+                        'Male' => 'Male',
+                        'Female' => 'Female',
                     ]),
             ])
 
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                ->iconButton(),
+                Tables\Actions\ViewAction::make()
+                ->iconButton(),
+                Tables\Actions\DeleteAction::make()
+                ->iconButton(),
+            ])
+
+            ->headerActions([
+                ExportAction::make()->exporter(PatientExporter::class)
+                    ->label('Export')
+                    ->color('secondary')
             ])
 
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                // ExportBulkAction::make()->exporter(PatientExporter::class)
+                //     ->label('Export Selected')
             ]);
     }
 
@@ -140,4 +177,10 @@ class PatientResource extends Resource
             'edit' => Pages\EditPatient::route('/{record}/edit'),
         ];
     }
+    // public static function getWidgets(): array
+    // {
+    //     return [
+    //         PatientResource\Widgets\PatientOverview::class,
+    //     ]
+    // }
 }

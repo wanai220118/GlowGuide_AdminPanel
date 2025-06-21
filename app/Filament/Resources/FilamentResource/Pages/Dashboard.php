@@ -1,21 +1,29 @@
 <?php
 
-namespace App\Filament\Resources\FilamentResource\Pages;
+namespace App\Filament\Pages;
 
-use App\Filament\Resources\FilamentResource;
-use Filament\Resources\Pages\Page;
-use Filament\Pages\Dashboard as BaseDashboard;
-use App\Filament\Resources\PatientResource\Widgets\StatsOverview;
+use Filament\Pages\Page;
+use App\Filament\Widgets\OrderTrendChart;
+use App\Filament\Widgets\PatientGenderChart;
+use App\Filament\Widgets\StatsOverview;
 
-// class Dashboard extends Page
-// {
-//     protected function getWidgets(): array
-//     {
-//         return [
-//             StatsOverview::class,
-//         ];
-//     }
-//     protected static string $resource = FilamentResource::class;
+class Dashboard extends Page
+{
+    protected static ?string $navigationIcon = 'heroicon-o-home';
+    protected static string $view = 'filament.pages.dashboard';
+    protected static ?string $title = 'Dashboard';
 
-//     protected static string $view = 'filament.resources.filament-resource.pages.dashboard';
-// }
+    public function getHeaderWidgets(): array
+    {
+        return [
+            StatsOverview::class,
+        ];
+    }
+
+    public function getFooterWidgets(): array
+    {
+        return [
+            OrderTrendChart::class,
+        ];
+    }
+}

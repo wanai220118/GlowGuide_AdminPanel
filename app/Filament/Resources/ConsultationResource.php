@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\ConsultationExporter;
 
 class ConsultationResource extends Resource
 {
@@ -50,11 +52,18 @@ class ConsultationResource extends Resource
 
                 Forms\Components\DatePicker::make('cons_date')
                     ->label('Consultation Date')
+                    ->firstDayOfWeek(1)
+                    ->native(false)
                     ->date()
                     ->required(),
 
                 Forms\Components\TimePicker::make('cons_time')
                     ->label('Consultation Time')
+                    ->datalist([
+                        '08:00',
+                        '10:00',
+                        '14:00'
+                    ])
                     ->required(),
 
                 Forms\Components\Select::make('status')
@@ -103,12 +112,26 @@ class ConsultationResource extends Resource
                         'completed' => 'Completed',
                         'cancelled' => 'Cancelled',
                     ]),
+
+                Tables\Filters\SelectFilter::make('staff_id')
+                    ->label('Staff')
+                    ->relationship('staff', 'name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                ->iconButton(),
+                Tables\Actions\ViewAction::make()
+                ->iconButton(),
+                Tables\Actions\DeleteAction::make()
+                ->iconButton(),
             ])
+
+            ->headerActions([
+                ExportAction::make()->exporter(ConsultationExporter::class)
+                    ->label('Export')
+                    ->color('secondary')
+            ])
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

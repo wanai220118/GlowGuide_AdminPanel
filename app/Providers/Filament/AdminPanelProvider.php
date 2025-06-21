@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\OrderTrendChart;
+use App\Filament\Widgets\StatsOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -17,6 +19,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Filament\Pages\Auth\Register;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,8 +30,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration(Register::class)
             ->colors([
                 'primary' => Color::Fuchsia,
+                'secondary' => Color::Indigo,
             ])
 
             ->favicon(asset('images/FI3.png'))
@@ -37,10 +42,12 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Resources\PatientResource::class,
                 \App\Filament\Resources\StaffResource::class,
                 \App\Filament\Resources\ConsultationResource::class,
+                \App\Filament\Resources\CategoryResource::class,
                 \App\Filament\Resources\ProductResource::class,
                 \App\Filament\Resources\OrderResource::class,
             ])
-            // ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            ->databaseNotifications()
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
@@ -63,6 +70,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->widgets([
+            StatsOverview::class,
+            OrderTrendChart::class,
             ]);
     }
 }

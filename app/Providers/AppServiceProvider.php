@@ -5,7 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
-
+use Filament\Http\Responses\Auth\Contracts\LoginResponse;
+use App\Http\Responses\CustomLoginResponse;
 class AppServiceProvider extends ServiceProvider
 {
     public function boot(): void

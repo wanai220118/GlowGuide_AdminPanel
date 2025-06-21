@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\StaffExporter;
 
 class StaffResource extends Resource
 {
@@ -40,14 +42,25 @@ class StaffResource extends Resource
                 Forms\Components\Select::make('specialist')
                     ->label('Specialist')
                     ->options([
-                        'aesthetic doctor' => 'Aesthetic Doctor',
-                        'dermatologist' => 'Dermatologist',
-                        'esthetician' => 'Esthetician',
+                        'Aesthetic Doctor' => 'Aesthetic Doctor',
+                        'Dermatologist' => 'Dermatologist',
+                        'Esthetician' => 'Esthetician',
                     ])
                     ->required(),
 
-                Forms\Components\Select::make('day')
-                    ->label('Day')
+                // Forms\Components\Select::make('day')
+                //     ->label('Day')
+                //     ->options([
+                //         'Monday' => 'Monday',
+                //         'Tuesday' => 'Tuesday',
+                //         'Wednesday' => 'Wednesday',
+                //         'Thursday' => 'Thursday',
+                //         'Friday' => 'Friday',
+                //     ])
+                //     ->required(),
+
+                Forms\Components\CheckboxList::make('working_days')
+                    ->label('Working Days')
                     ->options([
                         'Monday' => 'Monday',
                         'Tuesday' => 'Tuesday',
@@ -55,8 +68,19 @@ class StaffResource extends Resource
                         'Thursday' => 'Thursday',
                         'Friday' => 'Friday',
                     ])
-                    ->required(),
-                
+                    ->columns(2)
+                    ->required()
+                    ->afterStateHydrated(function ($component, $state) {
+                        // Decode if it's stored as JSON in DB
+                        if (is_string($state)) {
+                            $component->state(json_decode($state, true));
+                        }
+                    })
+                    ->dehydrateStateUsing(function ($state) {
+                        return json_encode($state); // Save as JSON
+                    })
+                    ->default([]),
+
                 Forms\Components\Toggle::make('slot1')
                     ->label('Slot 1 (8AM-10AM)')
                     ->default(true)
@@ -64,7 +88,7 @@ class StaffResource extends Resource
                     ->offColor('danger')
                     ->inline(false)
                     ->required(),
-                
+
                 Forms\Components\Toggle::make('slot2')
                     ->label('Slot 2 (10AM-12PM)')
                     ->default(true)
@@ -92,15 +116,25 @@ class StaffResource extends Resource
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('specialist'),
-                Tables\Columns\TextColumn::make('day'),
-                Tables\Columns\TextColumn::make('slot1')
-                    ->label('Slot 1 (8AM-10AM)'),
-                Tables\Columns\TextColumn::make('slot2')
-                    ->label('Slot 2 (10AM-12PM)'),
-                Tables\Columns\TextColumn::make('slot3')
-                    ->label('Slot 3 (2PM-4PM)'),
 
+                Tables\Columns\TextColumn::make('working_days')
+                    ->label('Working Days')
+                    ->formatStateUsing(function ($state) {
+                        $decoded = json_decode($state, true);
+                        if (is_array($decoded)) {
+                            return implode(', ', $decoded);
+                        }
+                        return $state; // fallback: just show raw string
+                    }),
+
+                Tables\Columns\CheckboxColumn::make('slot1')
+                    ->label('Slot 1 (8AM-10AM)'),
+                Tables\Columns\CheckboxColumn::make('slot2')
+                    ->label('Slot 2 (10AM-12PM)'),
+                Tables\Columns\CheckboxColumn::make('slot3')
+                    ->label('Slot 3 (2PM-4PM)'),
             ])
+
             ->filters([
                 Tables\Filters\SelectFilter::make('specialist')
                     ->options([
@@ -110,10 +144,20 @@ class StaffResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                ->iconButton(),
+                Tables\Actions\ViewAction::make()
+                ->iconButton(),
+                Tables\Actions\DeleteAction::make()
+                ->iconButton(),
             ])
+
+            ->headerActions([
+                ExportAction::make()->exporter(StaffExporter::class)
+                    ->label('Export')
+                    ->color('secondary')
+            ])
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -124,6 +168,7 @@ class StaffResource extends Resource
     public static function getRelations(): array
     {
         return [
+            // 'schedules' => RelationManagers\StaffSchedulesRelationManager::class,
             // 'patient' => RelationManagers\Patient::class,
             // 'consultations' => RelationManagers\Consultations::class,
             // RelationManagers\Consultations::class,

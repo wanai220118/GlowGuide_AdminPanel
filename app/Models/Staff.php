@@ -35,11 +35,20 @@ class Staff extends Model
         'slot3'
     ];
 
+    protected $casts = [
+        'working_days' => 'array',
+    ];
     public static $specialistOptions = [
         'Aesthetic doctor',
         'Dermatologist',
         'Esthetician',
     ];
+
+    // public function schedules()
+    // {
+    //     return $this->hasMany(StaffSchedule::class, 'staff_id', 'id');
+
+    // }
 
     // Optional: Add a mutator for safety
     // public function setSpecialistAttribute($value)
