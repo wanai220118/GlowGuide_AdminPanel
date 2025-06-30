@@ -88,8 +88,6 @@ class ConsultationResource extends Resource
                 Tables\Columns\TextColumn::make('consultation_name')
                     ->label('Consultation Name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('notes')
-                    ->label('Notes'),
                 Tables\Columns\TextColumn::make('patient.name')
                     ->label('Patient')
                     ->searchable(),
@@ -103,6 +101,8 @@ class ConsultationResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('notes')
+                    ->label('Notes'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
