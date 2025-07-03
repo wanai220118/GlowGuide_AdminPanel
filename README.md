@@ -23,8 +23,8 @@ https://youtu.be/U9YK8JZ6-Xc
 
 ## 📸 Screenshots
 
-[![image](https://github.com/user-attachments/assets/1e2873a1-4367-4e47-b048-67c5bedcab44)
-]
+![image](https://github.com/user-attachments/assets/1e2873a1-4367-4e47-b048-67c5bedcab44)
+
 ---
 
 ## 🛠 Technologies Used
