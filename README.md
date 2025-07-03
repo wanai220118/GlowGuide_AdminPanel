@@ -23,8 +23,8 @@ A web-based admin system built with Laravel and Filament for managing users, con
 
 ## 📸 Screenshots
 
-![image](https://github.com/user-attachments/assets/1e2873a1-4367-4e47-b048-67c5bedcab44)
-
+[![image](https://github.com/user-attachments/assets/1e2873a1-4367-4e47-b048-67c5bedcab44)
+](https://youtu.be/U9YK8JZ6-Xc)
 ---
 
 ## 🛠 Technologies Used
