@@ -17,7 +17,10 @@ A web-based admin system built with Laravel and Filament for managing users, con
 
 ## 🎥 Demonstration
 
-https://drive.google.com/file/d/1F5CBtmte7EEJiFUYmP9HtoQ6WsFy_Pa6/view?usp=sharing
+This folder contains the demonstration for the GlowGuide Admin Panel.
+
+> 🔗 [Click here to watch the video on Google Drive](https://drive.google.com/file/d/1F5CBtmte7EEJiFUYmP9HtoQ6WsFy_Pa6/view?usp=sharing
+)
 
 ---
 
